@@ -1,0 +1,29 @@
+{
+  "name": "huge-learner-back",
+  "version": "1.0.0",
+  "description": "A project for going deep down into full-stack development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VanishMax/huge-learner.git"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "typescript",
+    "nodejs",
+    "tensorflow",
+    "pwa",
+    "docker",
+    "mongodb"
+  ],
+  "author": "VanishMax",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VanishMax/huge-learner/issues"
+  },
+  "homepage": "https://github.com/VanishMax/huge-learner#readme"
+}
