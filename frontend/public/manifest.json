@@ -1,0 +1,20 @@
+{
+	"background_color": "#9d4da3",
+	"theme_color": "#fff",
+	"name": "huge learner",
+	"short_name": "huge learner",
+	"display": "standalone",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "icons/logo-192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "icons/logo-512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}
