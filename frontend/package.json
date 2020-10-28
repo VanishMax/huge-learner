@@ -4,7 +4,7 @@
   "description": "A project for going deep down into full-stack development",
   "main": "index.js",
   "scripts": {
-    "start": "snowpack dev",
+    "dev": "snowpack dev",
     "build": "snowpack build",
     "lint": "eslint --fix ."
   },
@@ -14,6 +14,8 @@
     }
   },
   "dependencies": {
+    "@sentry/react": "^5.27.1",
+    "@sentry/tracing": "^5.27.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
