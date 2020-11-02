@@ -5,9 +5,10 @@ import {
   GraphQLString,
   GraphQLNonNull,
 } from 'graphql';
-import ImageModel, {
+import {
   Image, ImageGraphqlType, UpdateImageInputType, SearchImageInputType,
-} from './img-model';
+} from './image/types';
+import ImageModel from './image/model';
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({

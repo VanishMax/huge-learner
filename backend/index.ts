@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 import Koa from 'koa';
 import Router from '@koa/router';
 import graphqlHTTP from 'koa-graphql';
-import Schema from './schema';
-import db from './connection';
+import Schema from './shema';
+import db from './shema/connection';
 
 dotenv.config();
 
