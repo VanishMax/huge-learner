@@ -5,7 +5,9 @@ import {
   GraphQLString,
   GraphQLNonNull,
 } from 'graphql';
-import ImageModel, {Image, ImageGraphqlType, UpdateImageInputType} from './img-model';
+import ImageModel, {
+  Image, ImageGraphqlType, UpdateImageInputType, SearchImageInputType,
+} from './img-model';
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -13,10 +15,12 @@ const schema = new GraphQLSchema({
     fields: {
       images: {
         type: GraphQLList(ImageGraphqlType),
-        resolve: () => ImageModel.read(),
+        args: SearchImageInputType,
+        resolve: (source, args) => ImageModel.read(args),
       },
     },
   }),
+
   mutation: new GraphQLObjectType({
     name: 'mutations',
     fields: {

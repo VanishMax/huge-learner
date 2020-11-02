@@ -1,5 +1,8 @@
 import mongodb from 'mongodb';
-import {GraphQLError, GraphQLInputObjectType, GraphQLObjectType, GraphQLString} from 'graphql';
+import {
+  GraphQLError, GraphQLFieldConfigArgumentMap, GraphQLInputObjectType,
+  GraphQLInt, GraphQLObjectType, GraphQLString,
+} from 'graphql';
 import db from './connection';
 
 export const ImageGraphqlType = new GraphQLObjectType({
@@ -18,6 +21,19 @@ export const UpdateImageInputType = new GraphQLInputObjectType({
     },
   }),
 });
+
+export const SearchImageInputType: GraphQLFieldConfigArgumentMap = {
+  _id: {type: GraphQLString},
+  limit: {type: GraphQLInt},
+  offset: {type: GraphQLInt},
+  search: {type: GraphQLString},
+};
+export type SearchImageInputArgs = {
+  _id: string,
+  limit: number,
+  offset: number,
+  search: string,
+};
 
 const {ObjectID} = mongodb;
 ObjectID.prototype.valueOf = function () {
@@ -46,14 +62,16 @@ const model = {
     }
   },
 
-  read: async ({id = '', search = ''} = {}): Promise<Image[]> => {
+  read: async (args: Partial<SearchImageInputArgs> = {}): Promise<Image[]> => {
     try {
-      if (id) return await Images.findOne({_id: new ObjectID(id)}) || [];
-
       let filter = {};
-      if (search) filter = {$or: [{title: new RegExp(search, 'i')}, {author: new RegExp(search, 'i')}]};
+      if (args._id) filter = {...filter, _id: new ObjectID(args._id)};
+      if (args.search) filter = {...filter, title: new RegExp(args.search, 'i')};
 
       const imgs = await Images.find(filter);
+      if (args.limit) imgs.limit(args.limit);
+      if (args.offset) imgs.skip(args.offset);
+
       return await imgs.toArray();
     } catch (e) {
       console.error(e);
