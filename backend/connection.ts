@@ -1,12 +1,15 @@
 import mongodb from 'mongodb';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const {MongoClient} = mongodb;
 
-function MongoPool() {}
+function MongoPool () {}
 
 let database: mongodb.Db;
 
-function initPool(cb: ((arg0: mongodb.Db) => void) | null = null) {
+function initPool (cb: ((arg0: mongodb.Db) => void) | null = null) {
   const url = process.env.MONGO_URI || '';
   MongoClient.connect(url, { useUnifiedTopology: true, useNewUrlParser: true }, (err, db) => {
     if (err) throw err;
@@ -19,7 +22,7 @@ function initPool(cb: ((arg0: mongodb.Db) => void) | null = null) {
 
 MongoPool.initPool = initPool;
 
-function getInstance(cb: { (arg0: any): void; (arg0: mongodb.Db): void }) {
+function getInstance (cb: { (arg0: mongodb.Db): void }) {
   if (!database) initPool(cb);
   else if (cb && typeof (cb) === 'function') cb(database);
 }
