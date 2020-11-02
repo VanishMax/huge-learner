@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import {GraphQLObjectType, GraphQLString, GraphQLError} from 'graphql';
+import {GraphQLError, GraphQLInputObjectType, GraphQLObjectType, GraphQLString} from 'graphql';
 import db from './connection';
 
 export const ImageGraphqlType = new GraphQLObjectType({
@@ -7,6 +7,15 @@ export const ImageGraphqlType = new GraphQLObjectType({
   fields: () => ({
     _id: {type: GraphQLString},
     title: {type: GraphQLString},
+  }),
+});
+
+export const UpdateImageInputType = new GraphQLInputObjectType({
+  name: 'UpdateImageInput',
+  fields: () => ({
+    title: {
+      type: GraphQLString,
+    },
   }),
 });
 
@@ -55,6 +64,7 @@ const model = {
   update: async (_id: string, data: Partial<Image>) => {
     try {
       const img = await Images.findOne({_id: new ObjectID(_id)});
+
       if (img) {
         const updateQuery: Partial<Image> = {};
         (Object.keys(data) as Array<keyof typeof data>).forEach((key) => {
@@ -64,18 +74,19 @@ const model = {
           }
         });
         const query = Object.keys(updateQuery).length ? {$set: updateQuery} : null;
+
         if (query) {
           await Images.updateOne({_id: new ObjectID(_id)}, query);
-          const updated = await Images.findOne({_id: new ObjectID(_id)});
-
-          return {status: 200, data: updated};
+          return await Images.findOne({_id: new ObjectID(_id)});
         }
-        return {status: 400, data: {error: 'No Image data provided'}};
+
+        return img;
       }
-      return {status: 400, data: {error: 'No Image data provided'}};
+
+      return Promise.reject(new GraphQLError('Image with such _id does not exist'));
     } catch (e) {
       console.error(e);
-      return {status: 500};
+      return Promise.reject(new GraphQLError('Something wrong happened'));
     }
   },
 
