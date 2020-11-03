@@ -1,3 +1,16 @@
-.layout {
+.page {
+  width: 90%;
+  margin: auto;
+}
 
+@media screen and (min-width: 640px) {
+  .page {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .page {
+    width: 60%;
+  }
 }

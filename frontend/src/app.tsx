@@ -8,18 +8,16 @@ import './app.css';
 function App () {
   return (
     <Router>
-      <div className="layout">
-        <Nav />
+      <Nav />
 
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
     </Router>
   );
 }

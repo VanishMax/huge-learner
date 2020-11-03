@@ -5,7 +5,7 @@ import './nav.css';
 export default function Nav () {
   return (
     <header className="header">
-      <img src="/icons/logo-512.png" className="nav-img" alt="Huge learner logo" />
+      <img src="/icons/hl.png" className="nav-img" alt="Huge learner logo" />
       <nav className="header-nav">
         <Link to="/">Take picture</Link>
         <Link to="/about">Statistics</Link>

@@ -1,7 +1,26 @@
 .header {
+  padding: 3em 0 0;
+  margin-bottom: 3em;
+}
 
+.nav-img {
+  display: block;
+  margin: auto;
+  width: 156px;
 }
 
 .header-nav {
   display: flex;
+  justify-content: center;
+  margin-top: 3.5em;
+}
+
+.header-nav a {
+  color: #424567;
+  text-decoration: none;
+  font-size: 1.1em;
+}
+
+.header-nav a:not(:last-child) {
+  margin-right: 2em;
 }
