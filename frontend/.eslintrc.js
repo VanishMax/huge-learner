@@ -24,6 +24,7 @@ module.exports = {
     'import/prefer-default-export': 0,
 
     // Typescript options
+    '@typescript-eslint/space-before-function-paren': ["error", "always"],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/member-delimiter-style': ['error', {
