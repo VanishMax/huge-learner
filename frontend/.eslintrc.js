@@ -23,6 +23,9 @@ module.exports = {
     curly: [0, 'multi'],
     'import/prefer-default-export': 0,
 
+    // Jsx options
+    'jsx-a11y/media-has-caption': 0,
+
     // Typescript options
     '@typescript-eslint/space-before-function-paren': ["error", "always"],
     '@typescript-eslint/no-explicit-any': 0,
