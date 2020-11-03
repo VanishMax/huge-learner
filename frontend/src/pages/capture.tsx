@@ -1,29 +1,33 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './capture.css';
 
-const IMG_WIDTH = 640;
-const IMG_HEIGHT = 360;
+const IMG_WIDTH = 1280;
+const IMG_HEIGHT = 720;
 
 export default function Capture () {
   const video = useRef<HTMLVideoElement>(null);
   const photo = useRef<HTMLImageElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const [notAllowed, changeNotAllowed] = useState(true);
 
-  useEffect(() => {
-    // On component load, start streaming the video
+  const createVideoStream = () => {
     const constraints = { audio: false, video: { width: IMG_WIDTH, height: IMG_HEIGHT } };
+    if (!navigator.mediaDevices) return;
+
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then((mediaStream) => {
         if (video?.current) {
           video.current.srcObject = mediaStream;
           video.current.onloadedmetadata = () => video?.current?.play();
+          changeNotAllowed(false);
         }
       })
       .catch((err) => {
+        changeNotAllowed(true);
         console.warn(`${err.name}: ${err.message}`);
       });
-  }, []);
+  };
 
   const takePhoto = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -38,11 +42,32 @@ export default function Capture () {
     }
   };
 
+  useEffect(createVideoStream, []);
+
   return (
     <section className="page capture">
       <div className="camera">
-        <video autoPlay ref={video}>Video stream not available.</video>
-        <button type="button" onClick={takePhoto}>Take photo</button>
+        {notAllowed ? (
+          <div
+            className="not-allowed"
+            role="button"
+            tabIndex={0}
+            onKeyPress={createVideoStream}
+            onClick={createVideoStream}
+          >
+            <img src="/icons/denied.svg" alt="Video not available" className="pointer" />
+            <p className="pointer">
+              Please, allow the website to use the camera.
+              <br />
+              Click here to try again.
+            </p>
+          </div>
+        ) : (
+          <button type="button" onClick={takePhoto}>
+            <img src="/icons/cam.svg" alt="Use your camera" />
+          </button>
+        )}
+        <video style={{display: notAllowed ? 'none' : 'block'}} autoPlay ref={video}>Video stream not available.</video>
       </div>
 
       <canvas ref={canvas} />
