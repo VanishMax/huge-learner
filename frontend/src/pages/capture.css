@@ -49,6 +49,18 @@
   width: 32px;
 }
 
+.modal-overlay .modal.capture-modal {
+  width: 50%;
+  max-width: 50%;
+  height: auto;
+  max-height: 80%;
+}
+
+.modal-overlay .modal.capture-modal img {
+  width: 100%;
+  border-radius: 1em;
+}
+
 @media screen {
   .capture .camera .not-allowed, .capture .camera video {
     height: 500px;

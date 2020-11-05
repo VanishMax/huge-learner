@@ -1,14 +1,24 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {
+  useEffect, useRef, useState, useContext, useMemo,
+} from 'react';
 import './capture.css';
+import {Context as ModalContext} from '../components/modal/modal-context';
 
 const IMG_WIDTH = 1280;
 const IMG_HEIGHT = 720;
 
 export default function Capture () {
   const video = useRef<HTMLVideoElement>(null);
-  const photo = useRef<HTMLImageElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [notAllowed, changeNotAllowed] = useState(true);
+  const [imgSrc, changeImgSrc] = useState<string>('');
+
+  const modal = useContext(ModalContext);
+  const modalComponent = useMemo(() => (
+    <>
+      <img src={imgSrc} alt="Camera capture" />
+    </>
+  ), [imgSrc]);
 
   const createVideoStream = () => {
     const constraints = { audio: false, video: { width: IMG_WIDTH, height: IMG_HEIGHT } };
@@ -31,18 +41,28 @@ export default function Capture () {
 
   const takePhoto = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (photo?.current && canvas?.current && video?.current) {
+    if (canvas?.current && video?.current) {
       const context = canvas.current.getContext('2d');
       canvas.current.width = IMG_WIDTH;
       canvas.current.height = IMG_HEIGHT;
+
+      context?.translate(IMG_WIDTH / 2, IMG_WIDTH / 2);
+      context?.scale(-1, 1);
+      context?.translate(-(IMG_WIDTH / 2), -(IMG_WIDTH / 2));
       context?.drawImage(video.current, 0, 0, IMG_WIDTH, IMG_HEIGHT);
 
       const data = canvas.current.toDataURL('image/png');
-      photo.current.setAttribute('src', data);
+
+      changeImgSrc(data);
     }
   };
 
   useEffect(createVideoStream, []);
+  useEffect(() => modal.set?.({component: modalComponent, props: {modalClass: 'capture-modal'}}), [imgSrc]);
+  useEffect(() => {
+    if (modal.val) video.current?.pause();
+    else video.current?.play();
+  }, [modal.val]);
 
   return (
     <section className="page capture">
@@ -71,9 +91,6 @@ export default function Capture () {
       </div>
 
       <canvas ref={canvas} />
-      <div className="output">
-        <img alt="The screen capture" ref={photo} />
-      </div>
     </section>
   );
 }
