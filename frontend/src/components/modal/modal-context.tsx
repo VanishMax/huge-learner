@@ -1,5 +1,5 @@
-import React, {useState, createContext} from 'react';
-import type {ComponentProps} from '../../types';
+import React, { useState, createContext } from 'react';
+import type { ComponentProps } from '../../types';
 
 type ModalContextValue = {
   component: JSX.Element,
@@ -17,9 +17,9 @@ const defaultModalContextValueProps: ModalContextValueProps = {
 export const Context = createContext<{
   val: ModalContextValue|null,
   set:React.Dispatch<any>|null,
-}>({val: null, set: null});
+}>({ val: null, set: null });
 
-export default function ModalContext ({children}: ComponentProps<{}>) {
+export default function ModalContext ({ children }: ComponentProps<{}>) {
   const [component, setComponent] = useState<ModalContextValue|null>(null);
   const val = {
     val: component,
@@ -28,7 +28,7 @@ export default function ModalContext ({children}: ComponentProps<{}>) {
       else if (!data.component) throw new Error('"component" property of modal window is required.');
       else setComponent({
         component: data.component,
-        props: {...defaultModalContextValueProps, ...(data.props ? data.props : {})},
+        props: { ...defaultModalContextValueProps, ...(data.props ? data.props : {}) },
       });
     },
   };

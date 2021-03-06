@@ -12,22 +12,7 @@ module.exports = {
       'output': 'stream'
     }]
   ],
-  install: [
-    /* ... */
-  ],
-  installOptions: {
-    /* ... */
-  },
   devOptions: {
     port: 3000,
-  },
-  buildOptions: {
-    /* ... */
-  },
-  proxy: {
-    /* ... */
-  },
-  alias: {
-    /* ... */
   },
 };

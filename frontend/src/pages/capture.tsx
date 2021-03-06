@@ -2,7 +2,7 @@ import React, {
   useEffect, useRef, useState, useContext, useMemo,
 } from 'react';
 import './capture.css';
-import {Context as ModalContext} from '../components/modal/modal-context';
+import { Context as ModalContext } from '../components/modal/modal-context';
 
 const IMG_WIDTH = 1280;
 const IMG_HEIGHT = 720;
@@ -58,7 +58,7 @@ export default function Capture () {
   };
 
   useEffect(createVideoStream, []);
-  useEffect(() => modal.set?.({component: modalComponent, props: {modalClass: 'capture-modal'}}), [imgSrc]);
+  useEffect(() => modal.set?.({ component: modalComponent, props: { modalClass: 'capture-modal' } }), [imgSrc]);
   useEffect(() => {
     if (modal.val) video.current?.pause();
     else video.current?.play();
@@ -87,7 +87,7 @@ export default function Capture () {
             <img src="/icons/cam.svg" alt="Use your camera" />
           </button>
         )}
-        <video style={{display: notAllowed ? 'none' : 'block'}} autoPlay ref={video}>Video stream not available.</video>
+        <video style={{ display: notAllowed ? 'none' : 'block' }} autoPlay ref={video}>Video stream not available.</video>
       </div>
 
       <canvas ref={canvas} />

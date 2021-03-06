@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ModalContext from './components/modal/modal-context';
 import Modal from './components/modal';
 import Nav from './components/nav';

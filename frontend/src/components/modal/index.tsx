@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useRef} from 'react';
-import {Context as ModalContext} from './modal-context';
+import React, { useContext, useEffect, useRef } from 'react';
+import { Context as ModalContext } from './modal-context';
 import composeClasses from '../../utils/compose-classes';
 import './modal.css';
 
