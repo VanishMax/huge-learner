@@ -4,13 +4,23 @@ import Router from '@koa/router';
 import graphqlHTTP from 'koa-graphql';
 import Schema from './shema';
 import db from './shema/connection';
+import type { DbType, MemoizedCollections } from './shema/connection';
 
 dotenv.config();
 
-db.initPool();
+interface ContextExtension {
+  db: DbType,
+  collections: Partial<MemoizedCollections>,
+}
 
-const app = new Koa();
-const router = new Router();
+const app = new Koa<{}, ContextExtension>();
+const router = new Router<any, ContextExtension>();
+
+app.use(async (ctx, next) => {
+  ctx.db = await db.connect();
+  ctx.collections = {};
+  await next();
+});
 
 router.all('/graphql', graphqlHTTP({
   schema: Schema,

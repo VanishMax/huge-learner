@@ -3,29 +3,34 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const {MongoClient} = mongodb;
+const { MongoClient } = mongodb;
 
-function MongoPool () {}
-
-let database: mongodb.Db;
-
-function initPool (cb: ((arg0: mongodb.Db) => void) | null = null) {
+async function connectDb (): Promise<mongodb.Db> {
   const url = process.env.MONGO_URI || '';
-  MongoClient.connect(url, { useUnifiedTopology: true, useNewUrlParser: true }, (err, db) => {
-    if (err) throw err;
-
-    database = db.db('huge-learner');
-    if (cb) cb(database);
+  const client = await MongoClient.connect(url, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
   });
-  return MongoPool;
+
+  return client.db('huge-learner');
 }
 
-MongoPool.initPool = initPool;
+export type DbType = mongodb.Db;
+export type AllowedCollectionNames = 'images';
+export type MemoizedCollections = Record<AllowedCollectionNames, mongodb.Collection>;
 
-function getInstance (cb: { (arg0: mongodb.Db): void }) {
-  if (!database) initPool(cb);
-  else if (cb && typeof (cb) === 'function') cb(database);
+async function getCollection<T> (ctx: {
+  db: mongodb.Db,
+  collections: MemoizedCollections,
+}, name: AllowedCollectionNames): Promise<mongodb.Collection<T>> {
+  if (ctx.collections[name]) return ctx.collections[name];
+
+  const collection = await ctx.db.collection<T>(name);
+  ctx.collections[name] = collection;
+  return collection;
 }
-MongoPool.getInstance = getInstance;
 
-export default MongoPool;
+export default {
+  connect: connectDb,
+  collection: getCollection,
+};

@@ -17,7 +17,9 @@ const schema = new GraphQLSchema({
       images: {
         type: GraphQLList(ImageGraphqlType),
         args: SearchImageInputType,
-        resolve: (source, args) => ImageModel.read(args),
+        resolve: (source, args) => {
+          return ImageModel.read(args);
+        },
       },
     },
   }),

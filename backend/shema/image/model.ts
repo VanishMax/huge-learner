@@ -1,22 +1,19 @@
 import mongodb from 'mongodb';
-import {GraphQLError} from 'graphql';
-import {SearchImageInputArgs, Image} from './types';
+import { GraphQLError } from 'graphql';
+import { SearchImageInputArgs, Image } from './types';
 import db from '../connection';
 
-const {ObjectID} = mongodb;
+const { ObjectID } = mongodb;
 ObjectID.prototype.valueOf = function () {
   return this.toString();
 };
 
 let Images: mongodb.Collection<Image>;
-db.getInstance((p_db) => {
-  Images = p_db.collection('images');
-});
 
 const model = {
   create: async (args: Image) => {
     try {
-      if (!args.title) return Promise.reject(new GraphQLError('title argument is required'));
+      if (!args.title) return await Promise.reject(new GraphQLError('title argument is required'));
       const res = await Images.insertOne(args);
       return res.ops;
     } catch (e) {
@@ -26,10 +23,14 @@ const model = {
   },
 
   read: async (args: Partial<SearchImageInputArgs> = {}): Promise<Image[]> => {
+    const Images = db.collection('images');
+
     try {
       let filter = {};
-      if (args._id) filter = {...filter, _id: new ObjectID(args._id)};
-      if (args.search) filter = {...filter, title: new RegExp(args.search, 'i')};
+      if (args._id) filter = { ...filter, _id: new ObjectID(args._id) };
+      if (args.search) filter = { ...filter, title: new RegExp(args.search, 'i') };
+
+      console.log(Images);
 
       const imgs = await Images.find(filter);
       if (args.limit) imgs.limit(args.limit);
@@ -44,7 +45,7 @@ const model = {
 
   update: async (_id: string, data: Partial<Image>) => {
     try {
-      const img = await Images.findOne({_id: new ObjectID(_id)});
+      const img = await Images.findOne({ _id: new ObjectID(_id) });
 
       if (img) {
         const updateQuery: Partial<Image> = {};
@@ -54,11 +55,11 @@ const model = {
             updateQuery[key] = data[key];
           }
         });
-        const query = Object.keys(updateQuery).length ? {$set: updateQuery} : null;
+        const query = Object.keys(updateQuery).length ? { $set: updateQuery } : null;
 
         if (query) {
-          await Images.updateOne({_id: new ObjectID(_id)}, query);
-          return await Images.findOne({_id: new ObjectID(_id)});
+          await Images.updateOne({ _id: new ObjectID(_id) }, query);
+          return await Images.findOne({ _id: new ObjectID(_id) });
         }
 
         return img;
@@ -74,11 +75,11 @@ const model = {
   delete: async (_id: string) => {
     try {
       if (_id) {
-        const img = await Images.findOne({_id: new ObjectID(_id)}) || [];
-        await Images.deleteOne({_id: new ObjectID(_id)});
+        const img = await Images.findOne({ _id: new ObjectID(_id) }) || [];
+        await Images.deleteOne({ _id: new ObjectID(_id) });
         return img;
       }
-      return Promise.reject(new GraphQLError('_id argument is required'));
+      return await Promise.reject(new GraphQLError('_id argument is required'));
     } catch (e) {
       console.error(e);
       return Promise.reject(new GraphQLError('Something wrong happened'));
