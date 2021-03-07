@@ -15,8 +15,8 @@ export type Image = {
 export const ImageGraphqlType = new GraphQLObjectType({
   name: 'Image',
   fields: () => ({
-    _id: {type: GraphQLString},
-    title: {type: GraphQLString},
+    _id: { type: GraphQLString },
+    title: { type: GraphQLString },
   }),
 });
 
@@ -30,10 +30,10 @@ export const UpdateImageInputType = new GraphQLInputObjectType({
 });
 
 export const SearchImageInputType: GraphQLFieldConfigArgumentMap = {
-  _id: {type: GraphQLString},
-  limit: {type: GraphQLInt},
-  offset: {type: GraphQLInt},
-  search: {type: GraphQLString},
+  _id: { type: GraphQLString },
+  limit: { type: GraphQLInt },
+  offset: { type: GraphQLInt },
+  search: { type: GraphQLString },
 };
 
 export type SearchImageInputArgs = {

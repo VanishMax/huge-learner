@@ -1,5 +1,7 @@
 import mongodb from 'mongodb';
 import dotenv from 'dotenv';
+import type { AllowedCollectionNames } from '../types/db';
+import { CustomContext } from '../types/context';
 
 dotenv.config();
 
@@ -15,15 +17,8 @@ async function connectDb (): Promise<mongodb.Db> {
   return client.db('huge-learner');
 }
 
-export type DbType = mongodb.Db;
-export type AllowedCollectionNames = 'images';
-export type MemoizedCollections = Record<AllowedCollectionNames, mongodb.Collection>;
-
-async function getCollection<T> (ctx: {
-  db: mongodb.Db,
-  collections: MemoizedCollections,
-}, name: AllowedCollectionNames): Promise<mongodb.Collection<T>> {
-  if (ctx.collections[name]) return ctx.collections[name];
+async function getCollection<T> (ctx: CustomContext, name: AllowedCollectionNames): Promise<mongodb.Collection<T>> {
+  if (ctx.collections[name]) return ctx.collections[name] as mongodb.Collection<T>;
 
   const collection = await ctx.db.collection<T>(name);
   ctx.collections[name] = collection;

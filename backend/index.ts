@@ -4,14 +4,9 @@ import Router from '@koa/router';
 import graphqlHTTP from 'koa-graphql';
 import Schema from './shema';
 import db from './shema/connection';
-import type { DbType, MemoizedCollections } from './shema/connection';
+import type { ContextExtension } from './types/context';
 
 dotenv.config();
-
-interface ContextExtension {
-  db: DbType,
-  collections: Partial<MemoizedCollections>,
-}
 
 const app = new Koa<{}, ContextExtension>();
 const router = new Router<any, ContextExtension>();

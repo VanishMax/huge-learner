@@ -7,8 +7,8 @@ import {
 } from 'graphql';
 import {
   Image, ImageGraphqlType, UpdateImageInputType, SearchImageInputType,
-} from './image/types';
-import ImageModel from './image/model';
+} from '../types/images';
+import ImageModel from './models/image';
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -17,8 +17,9 @@ const schema = new GraphQLSchema({
       images: {
         type: GraphQLList(ImageGraphqlType),
         args: SearchImageInputType,
-        resolve: (source, args) => {
-          return ImageModel.read(args);
+        resolve: async (source, args, ctx) => {
+          const model = await ImageModel(ctx);
+          return model.read(args);
         },
       },
     },
@@ -32,7 +33,10 @@ const schema = new GraphQLSchema({
         args: {
           title: { type: GraphQLNonNull(GraphQLString) },
         },
-        resolve: (source, args) => ImageModel.create(args as Image),
+        resolve: async (source, args, ctx) => {
+          const model = await ImageModel(ctx);
+          return model.create(args as Image);
+        },
       },
       update_image: {
         type: ImageGraphqlType,
@@ -43,14 +47,20 @@ const schema = new GraphQLSchema({
             defaultValue: {},
           },
         },
-        resolve: (source, args) => ImageModel.update(args._id, args.upd as Partial<Image>),
+        resolve: async (source, args, ctx) => {
+          const model = await ImageModel(ctx);
+          return model.update(args._id, args.upd as Partial<Image>);
+        },
       },
       delete_image: {
         type: ImageGraphqlType,
         args: {
           _id: { type: GraphQLNonNull(GraphQLString) },
         },
-        resolve: (source, args) => ImageModel.delete(args._id),
+        resolve: async (source, args, ctx) => {
+          const model = await ImageModel(ctx);
+          return model.delete(args._id);
+        },
       },
     },
   }),
