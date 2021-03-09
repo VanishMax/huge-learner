@@ -11,10 +11,11 @@ dotenv.config();
 const app = new Koa<{}, ContextExtension>();
 const router = new Router<any, ContextExtension>();
 
-app.use(async (ctx, next) => {
-  ctx.db = await db.connect();
-  ctx.collections = {};
-  await next();
+db.connect().then((res) => {
+  app.context.db = res;
+  app.context.collections = {};
+}).catch((e) => {
+  console.error('Database connection failed with error:', e);
 });
 
 router.all('/graphql', graphqlHTTP({
