@@ -1,14 +1,18 @@
 version: "3.9"
 
 services:
-  front:
-    context: ./frontend
-    dockerfile: Dockerfile
+  front_prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "80:80"
-    volumes:
-      -
-    links:
-      - back
-  back:
-    build: ./backend
+    depends_on:
+      - back_prod
+
+  back_prod:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
