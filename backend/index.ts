@@ -25,7 +25,7 @@ router.all('/graphql', graphqlHTTP({
 
 app.use(router.routes()).use(router.allowedMethods());
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log('The app is running on port:', PORT);
 });

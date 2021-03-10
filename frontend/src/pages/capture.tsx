@@ -1,7 +1,7 @@
 import React, {
   useEffect, useRef, useState, useContext, useMemo,
 } from 'react';
-import './capture.css';
+import './capture.scss';
 import { Context as ModalContext } from '../components/modal/modal-context';
 
 const IMG_WIDTH = 1280;
@@ -58,7 +58,11 @@ export default function Capture () {
   };
 
   useEffect(createVideoStream, []);
-  useEffect(() => modal.set?.({ component: modalComponent, props: { modalClass: 'capture-modal' } }), [imgSrc]);
+  useEffect(() => {
+    if (imgSrc) {
+      modal.set?.({ component: modalComponent, props: { modalClass: 'capture-modal' } });
+    }
+  }, [imgSrc]);
   useEffect(() => {
     if (modal.val) video.current?.pause();
     else video.current?.play();

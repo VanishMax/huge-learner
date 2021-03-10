@@ -15,6 +15,8 @@ async function ImageModel (ctx: CustomContext) {
   return {
     create: async (args: Image) => {
       try {
+        // TODO: Add universal methods for checking the existance of required fields
+        // TODO: Add createdAt field to every new entity
         if (!args.title) return await Promise.reject(new GraphQLError('title argument is required'));
         const res = await Images.insertOne(args);
         return res.ops;
@@ -27,6 +29,7 @@ async function ImageModel (ctx: CustomContext) {
     read: async (args: Partial<SearchImageInputArgs> = {}): Promise<Image[]> => {
       try {
         let filter = {};
+        // TODO: Add universal filters and pagination for different fields
         if (args._id) filter = { ...filter, _id: new ObjectID(args._id) };
         if (args.search) filter = { ...filter, title: new RegExp(args.search, 'i') };
 
@@ -46,6 +49,7 @@ async function ImageModel (ctx: CustomContext) {
         const img = await Images.findOne({ _id: new ObjectID(_id) });
 
         if (img) {
+          // TODO: Add universal methods for updating fields
           const updateQuery: Partial<Image> = {};
           (Object.keys(data) as Array<keyof typeof data>).forEach((key) => {
             if (Object.keys(img).includes(key) && img[key] !== data[key]) {

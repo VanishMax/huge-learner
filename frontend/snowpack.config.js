@@ -7,6 +7,7 @@ module.exports = {
     '@snowpack/plugin-react-refresh',
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-typescript',
+    '@snowpack/plugin-sass',
     ['@snowpack/plugin-run-script', {
       'cmd': "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
       'output': 'stream'
@@ -15,4 +16,7 @@ module.exports = {
   devOptions: {
     port: 3000,
   },
+  routes: [
+    { match: "routes", src: ".*", dest: "/index.html" },
+  ]
 };

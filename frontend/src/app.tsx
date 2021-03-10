@@ -5,7 +5,8 @@ import Modal from './components/modal';
 import Nav from './components/nav';
 import Capture from './pages/capture';
 import About from './pages/about';
-import './app.css';
+import Statistics from './pages/statistics';
+import './app.scss';
 
 function App () {
   return (
@@ -14,11 +15,14 @@ function App () {
         <Nav />
 
         <Switch>
-          <Route path="/about">
-            <About />
+          <Route path="/capture">
+            <Capture />
+          </Route>
+          <Route path="/statistics">
+            <Statistics />
           </Route>
           <Route path="/">
-            <Capture />
+            <About />
           </Route>
         </Switch>
 
