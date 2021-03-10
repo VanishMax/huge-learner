@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  front:
+    context: ./frontend
+    dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      -
+    links:
+      - back
+  back:
+    build: ./backend
