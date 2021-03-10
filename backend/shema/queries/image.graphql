@@ -1,0 +1,43 @@
+# This is an example how the image Model can be queried using CRUD
+
+query imgs {
+    images {
+        _id
+        title
+    }
+}
+
+query imgs_by_title {
+    images(search: "3") {
+        _id
+        title
+    }
+}
+
+query imgs_by_id {
+    images(_id: "60447777d156447e41e26949") {
+        _id
+        title
+    }
+}
+
+mutation create_image {
+    create_image(title: "Image 4") {
+        _id
+        title
+    }
+}
+
+mutation update_image {
+    update_image(_id: "60447785d156447e41e2694a", upd: { title: "Image 111"}) {
+        _id
+        title
+    }
+}
+
+mutation delete_image {
+    delete_image(_id: "60476f9a25f0702447a6d29e") {
+        _id
+        title
+    }
+}
